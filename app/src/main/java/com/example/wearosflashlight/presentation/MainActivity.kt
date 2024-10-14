@@ -25,6 +25,7 @@ import androidx.wear.compose.material.TimeText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,7 @@ fun WearApp(greetingName: String) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background),
+                .background(color = Color.White),
             contentAlignment = Alignment.Center
         ) {
             TimeText()
