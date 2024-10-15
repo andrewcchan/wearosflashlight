@@ -8,14 +8,23 @@ package com.example.wearosflashlight.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +36,7 @@ import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
@@ -36,22 +46,22 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            InfinitelyRepeatable()
         }
     }
 }
 
+// https://github.com/android/health-samples/blob/main/health-services/ExerciseSampleCompose/app/src/main/java/com/example/exercisesamplecompose/presentation/ExerciseSampleApp.kt
 @Composable
 fun WearApp(greetingName: String) {
     WearosflashlightTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.White),
+//                .background(color = Color.White),
+                    ,
             contentAlignment = Alignment.Center
         ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
         }
     }
 }
@@ -70,4 +80,29 @@ fun Greeting(greetingName: String) {
 @Composable
 fun DefaultPreview() {
     WearApp("Preview Android")
+}
+// https://developer.android.com/develop/ui/compose/animation/quick-guide
+@Preview
+@Composable
+fun InfinitelyRepeatable() {
+    // [START android_compose_animation_infinitely_repeating]
+    val infiniteTransition = rememberInfiniteTransition(label = "infinite")
+    val color by infiniteTransition.animateColor(
+        initialValue = Color.Green,
+        targetValue = Color.Blue,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "color"
+    )
+    Column(
+        modifier = Modifier.drawBehind {
+            drawRect(color)
+        }
+    ) {
+        // your composable here
+        WearApp("Android")
+    }
+    // [END android_compose_animation_infinitely_repeating]
 }
