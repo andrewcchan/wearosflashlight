@@ -6,10 +6,13 @@
 package com.example.wearosflashlight.presentation
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
@@ -35,12 +38,13 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
+//import androidx.wear.ambient.AmbientLifecycleObserver
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
@@ -48,7 +52,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             InfinitelyRepeatable()
         }
+
     }
+//https://github.com/android/health-samples/blob/main/health-services/ExerciseSample/app/src/main/java/com/example/exercise/MainActivity.kt
+
 }
 
 // https://github.com/android/health-samples/blob/main/health-services/ExerciseSampleCompose/app/src/main/java/com/example/exercisesamplecompose/presentation/ExerciseSampleApp.kt
@@ -88,10 +95,10 @@ fun InfinitelyRepeatable() {
     // [START android_compose_animation_infinitely_repeating]
     val infiniteTransition = rememberInfiniteTransition(label = "infinite")
     val color by infiniteTransition.animateColor(
-        initialValue = Color.Green,
-        targetValue = Color.Blue,
+        initialValue = Color.Red,
+        targetValue = Color.White,
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
+            animation = tween(1000, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "color"
