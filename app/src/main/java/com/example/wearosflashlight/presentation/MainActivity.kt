@@ -5,6 +5,8 @@
 
 package com.example.wearosflashlight.presentation
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +41,8 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+
 //import androidx.wear.ambient.AmbientLifecycleObserver
 
 
@@ -72,21 +77,22 @@ fun WearApp(greetingName: String) {
         }
     }
 }
-
 @Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
+fun UpdateBrightness() {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        setBrightness(context, isFull = true)
+        onDispose {
+            setBrightness(context, isFull = false)
+        }
+    }
 }
 
-@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
+fun setBrightness(context: Context, isFull: Boolean) {
+    val activity = context as? Activity ?: return
+    val layoutParams: WindowManager.LayoutParams = activity.window.attributes
+    layoutParams.screenBrightness = if (isFull) 1f else WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+    activity.window.attributes = layoutParams
 }
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
 @Preview
@@ -109,6 +115,7 @@ fun InfinitelyRepeatable() {
         }
     ) {
         // your composable here
+        UpdateBrightness()
         WearApp("Android")
     }
     // [END android_compose_animation_infinitely_repeating]
