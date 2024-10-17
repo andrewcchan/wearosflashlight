@@ -42,6 +42,7 @@ import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import kotlin.random.Random
 
 //import androidx.wear.ambient.AmbientLifecycleObserver
 
@@ -101,10 +102,20 @@ fun InfinitelyRepeatable() {
     // [START android_compose_animation_infinitely_repeating]
     val infiniteTransition = rememberInfiniteTransition(label = "infinite")
     val color by infiniteTransition.animateColor(
-        initialValue = Color.Red,
-        targetValue = Color.White,
+        initialValue = Color(
+            red = Random.nextFloat(),
+            green = Random.nextFloat(),
+            blue = Random.nextFloat(),
+            alpha = 1f
+        ),
+        targetValue = Color(
+            red = Random.nextFloat(),
+            green = Random.nextFloat(),
+            blue = Random.nextFloat(),
+            alpha = 1f
+        ),
         animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = FastOutSlowInEasing),
+            animation = tween(1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "color"
