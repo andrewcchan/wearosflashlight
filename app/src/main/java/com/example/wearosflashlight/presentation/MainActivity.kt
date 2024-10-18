@@ -21,6 +21,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,6 +29,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -41,9 +45,13 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.example.wearosflashlight.R
 import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
-
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 //import androidx.wear.ambient.AmbientLifecycleObserver
 
 
@@ -56,11 +64,48 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            InfinitelyRepeatable()
+            WearAppNavigation()
         }
 
     }
 //https://github.com/android/health-samples/blob/main/health-services/ExerciseSample/app/src/main/java/com/example/exercise/MainActivity.kt
+
+}
+@Composable
+fun WearAppNavigation() {
+    val navController = rememberNavController()
+    var selectedColor by remember { mutableStateOf(Color.Black) }
+
+    NavHost(navController = navController, startDestination = "home") {
+        // Home Screen
+        composable("home") {
+            HomeScreen(navController)
+        }
+
+        // Color Picker Screen
+        composable("infinitely_repeating") {
+            InfinitelyRepeatable(navController)
+        }
+    }
+}
+
+@Composable
+fun HomeScreen(navController: NavHostController) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    navController.navigate("infinitely_repeating")
+                })
+            },
+        contentAlignment = Alignment.Center
+    ) {
+    }
+}
+
+fun detectTapGestures(onTap: Any) {
 
 }
 
@@ -98,7 +143,7 @@ fun setBrightness(context: Context, isFull: Boolean) {
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
 @Preview
 @Composable
-fun InfinitelyRepeatable() {
+fun InfinitelyRepeatable(navController: NavHostController) {
     // [START android_compose_animation_infinitely_repeating]
     val infiniteTransition = rememberInfiniteTransition(label = "infinite")
     val color by infiniteTransition.animateColor(
@@ -124,6 +169,11 @@ fun InfinitelyRepeatable() {
         modifier = Modifier.drawBehind {
             drawRect(color)
         }
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    navController.navigate("home")
+                })
+            },
     ) {
         // your composable here
         UpdateBrightness()
