@@ -76,16 +76,17 @@ fun WearAppNavigation() {
     val navController = rememberNavController()
     var selectedColor by remember { mutableStateOf(Color.Black) }
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "infinitely_repeating") {
+        // Color Picker Screen
+        composable("infinitely_repeating") {
+            InfinitelyRepeatable(navController)
+        }
         // Home Screen
         composable("home") {
             HomeScreen(navController)
         }
 
-        // Color Picker Screen
-        composable("infinitely_repeating") {
-            InfinitelyRepeatable(navController)
-        }
+
     }
 }
 
