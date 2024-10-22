@@ -85,6 +85,10 @@ fun WearAppNavigation() {
         composable("home") {
             HomeScreen(navController)
         }
+        composable("white") {
+            UpdateBrightness()
+            WhiteScreen(navController)
+        }
 
 
     }
@@ -98,6 +102,22 @@ fun HomeScreen(navController: NavHostController) {
             .background(Color.Black)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
+                    navController.navigate("white")
+                })
+            },
+        contentAlignment = Alignment.Center
+    ) {
+    }
+}
+
+@Composable
+fun WhiteScreen(navController: NavHostController) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
                     navController.navigate("infinitely_repeating")
                 })
             },
@@ -106,9 +126,7 @@ fun HomeScreen(navController: NavHostController) {
     }
 }
 
-fun detectTapGestures(onTap: Any) {
 
-}
 
 // https://github.com/android/health-samples/blob/main/health-services/ExerciseSampleCompose/app/src/main/java/com/example/exercisesamplecompose/presentation/ExerciseSampleApp.kt
 @Composable
