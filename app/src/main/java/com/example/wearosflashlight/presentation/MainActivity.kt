@@ -61,7 +61,7 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         super.onCreate(savedInstanceState)
 
         setTheme(android.R.style.Theme_DeviceDefault)
@@ -72,14 +72,13 @@ class MainActivity : ComponentActivity() {
 
     }
 //https://github.com/android/health-samples/blob/main/health-services/ExerciseSample/app/src/main/java/com/example/exercise/MainActivity.kt
-
+//https://github.com/android/wear-os-samples/blob/main/ComposeStarter/app/src/main/java/com/example/android/wearable/composestarter/presentation/MainActivity.kt
 }
 @Composable
 fun WearAppNavigation() {
-    val navController = rememberSwipeDismissableNavController()
-
-    SwipeDismissableNavHost(navController = navController, startDestination = "infinitely_repeating") {
-        // Color Picker Screen
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "infinitely_repeating") {
+    // Color Picker Screen
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
                 onTapAction = {
@@ -109,7 +108,7 @@ fun WearAppNavigation() {
 }
 
 @Composable
-fun HomeScreen(onTapAction: () -> Unit,) {
+fun HomeScreen(onTapAction: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
