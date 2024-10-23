@@ -76,8 +76,8 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun WearAppNavigation() {
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "infinitely_repeating") {
+    val navController = rememberSwipeDismissableNavController()
+    SwipeDismissableNavHost(navController = navController, startDestination = "infinitely_repeating") {
     // Color Picker Screen
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
