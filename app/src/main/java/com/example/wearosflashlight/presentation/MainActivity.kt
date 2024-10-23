@@ -52,6 +52,9 @@ import androidx.navigation.compose.rememberNavController
 import kotlin.random.Random
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+
 //import androidx.wear.ambient.AmbientLifecycleObserver
 
 
@@ -73,21 +76,32 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun WearAppNavigation() {
-    val navController = rememberNavController()
-    var selectedColor by remember { mutableStateOf(Color.Black) }
+    val navController = rememberSwipeDismissableNavController()
 
-    NavHost(navController = navController, startDestination = "infinitely_repeating") {
+    SwipeDismissableNavHost(navController = navController, startDestination = "infinitely_repeating") {
         // Color Picker Screen
         composable("infinitely_repeating") {
-            InfinitelyRepeatable(navController)
+            InfinitelyRepeatable(
+                onTapAction = {
+                    navController.navigate("home")
+                }
+            )
         }
         // Home Screen
         composable("home") {
-            HomeScreen(navController)
+            HomeScreen(
+                onTapAction = {
+                    navController.navigate("white")
+                }
+            )
         }
         composable("white") {
             UpdateBrightness()
-            WhiteScreen(navController)
+            WhiteScreen(
+                onTapAction = {
+                    navController.navigate("infinitely_repeating")
+                }
+            )
         }
 
 
@@ -95,14 +109,14 @@ fun WearAppNavigation() {
 }
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(onTapAction: () -> Unit,) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    navController.navigate("white")
+                    onTapAction()
                 })
             },
         contentAlignment = Alignment.Center
@@ -111,14 +125,14 @@ fun HomeScreen(navController: NavHostController) {
 }
 
 @Composable
-fun WhiteScreen(navController: NavHostController) {
+fun WhiteScreen(onTapAction: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    navController.navigate("infinitely_repeating")
+                    onTapAction() // Call the passed function on tap
                 })
             },
         contentAlignment = Alignment.Center
@@ -162,7 +176,7 @@ fun setBrightness(context: Context, isFull: Boolean) {
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
 @Preview
 @Composable
-fun InfinitelyRepeatable(navController: NavHostController) {
+fun InfinitelyRepeatable(onTapAction: () -> Unit) {
     // [START android_compose_animation_infinitely_repeating]
     val infiniteTransition = rememberInfiniteTransition(label = "infinite")
     val color by infiniteTransition.animateColor(
@@ -190,7 +204,7 @@ fun InfinitelyRepeatable(navController: NavHostController) {
         }
             .pointerInput(Unit) {
                 detectTapGestures(onTap = {
-                    navController.navigate("home")
+                    onTapAction() // Call the passed function on tap
                 })
             },
     ) {
