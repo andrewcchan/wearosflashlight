@@ -35,6 +35,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+//import androidx.wear.compose.material.Icon
+
 import kotlin.random.Random
 
 /**
@@ -67,15 +70,7 @@ fun WearApp() {
 //    WearAppTheme {
 //        AppScaffold {
     SwipeDismissableNavHost(navController = navController, startDestination = "home") {
-//                composable("menu") {
-//                    GreetingScreen(
-//                        "Android",
-//                        onShowList = { navController.navigate("list") }
-//                    )
-//                }
-//                composable("list") {
-//                    ListScreen()
-//                }
+
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
                 onTapAction = {
@@ -118,8 +113,20 @@ fun HomeScreen(onTapAction: () -> Unit) {
             },
         contentAlignment = Alignment.Center
     ) {
+//        Icon(
+//            imageVector = androidx.compose.material.icons.Icons.Default.WbSunny,
+//            contentDescription = null,
+//            tint = Color.White)
+//    }
+
+        Text(
+            text = "Tap",
+            color = Color.White
+        )
     }
 }
+
+
 
 @Composable
 fun WhiteScreen(onTapAction: () -> Unit) {
@@ -139,7 +146,7 @@ fun WhiteScreen(onTapAction: () -> Unit) {
 
 
 @Composable
-fun WearApp2(greetingName: String) {
+fun Screen(greetingName: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -203,7 +210,7 @@ fun InfinitelyRepeatable(onTapAction: () -> Unit) {
     ) {
         // your composable here
         UpdateBrightness()
-        WearApp2("Android")
+        Screen("Android")
     }
     // [END android_compose_animation_infinitely_repeating]
 }
