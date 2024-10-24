@@ -36,6 +36,8 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.wear.compose.foundation.rememberSwipeToDismissBoxState
+import androidx.wear.compose.material.SwipeToDismissBox
 //import androidx.wear.compose.material.Icon
 
 import kotlin.random.Random
@@ -102,59 +104,80 @@ fun WearApp() {
 
 @Composable
 fun HomeScreen(onTapAction: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black)
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    onTapAction()
-                })
-            },
-        contentAlignment = Alignment.Center
+    val swipeToDismissState = rememberSwipeToDismissBoxState()
+    val context = LocalContext.current  // Get the current activity context
+
+    SwipeToDismissBox(
+        state = swipeToDismissState,
+        onDismissed = {
+            // Finish the activity and return to the watch face
+            (context as? Activity)?.finish()
+        }
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        onTapAction()
+                    })
+                },
+            contentAlignment = Alignment.Center
+        ) {
 //        Icon(
 //            imageVector = androidx.compose.material.icons.Icons.Default.WbSunny,
 //            contentDescription = null,
 //            tint = Color.White)
 //    }
 
-        Text(
-            text = "Tap",
-            color = Color.White
-        )
+            Text(
+                text = "Tap",
+                color = Color.White
+            )
+        }
     }
 }
 
 
-
 @Composable
 fun WhiteScreen(onTapAction: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    onTapAction() // Call the passed function on tap
-                })
-            },
-        contentAlignment = Alignment.Center
+    val swipeToDismissState = rememberSwipeToDismissBoxState()
+    val context = LocalContext.current  // Get the current activity context
+
+    SwipeToDismissBox(
+        state = swipeToDismissState,
+        onDismissed = {
+            // Finish the activity and return to the watch face
+            (context as? Activity)?.finish()
+        }
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        onTapAction() // Call the passed function on tap
+                    })
+                },
+            contentAlignment = Alignment.Center
+        ) {
+        }
     }
 }
 
 
 @Composable
 fun Screen(greetingName: String) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-//                .background(color = Color.White),
-        ,
-        contentAlignment = Alignment.Center
-    ) {
-    }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+            ,
+            contentAlignment = Alignment.Center
+        ) {
+        }
 }
 
 @Composable
@@ -171,9 +194,11 @@ fun UpdateBrightness() {
 fun setBrightness(context: Context, isFull: Boolean) {
     val activity = context as? Activity ?: return
     val layoutParams: WindowManager.LayoutParams = activity.window.attributes
-    layoutParams.screenBrightness = if (isFull) 1f else WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+    layoutParams.screenBrightness =
+        if (isFull) 1f else WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
     activity.window.attributes = layoutParams
 }
+
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
 @Composable
 fun InfinitelyRepeatable(onTapAction: () -> Unit) {
@@ -198,20 +223,32 @@ fun InfinitelyRepeatable(onTapAction: () -> Unit) {
         ),
         label = "color"
     )
-    Column(
-        modifier = Modifier.drawBehind {
-            drawRect(color)
+    val swipeToDismissState = rememberSwipeToDismissBoxState()
+    val context = LocalContext.current  // Get the current activity context
+
+    SwipeToDismissBox(
+        state = swipeToDismissState,
+        onDismissed = {
+            // Finish the activity and return to the watch face
+            (context as? Activity)?.finish()
         }
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    onTapAction() // Call the passed function on tap
-                })
-            },
     ) {
-        // your composable here
-        UpdateBrightness()
-        Screen("Android")
+        Column(
+            modifier = Modifier
+                .drawBehind {
+                    drawRect(color)
+                }
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        onTapAction() // Call the passed function on tap
+                    })
+                },
+        ) {
+            // your composable here
+            UpdateBrightness()
+            Screen("Android")
+        }
+        // [END android_compose_animation_infinitely_repeating]
     }
-    // [END android_compose_animation_infinitely_repeating]
 }
 
