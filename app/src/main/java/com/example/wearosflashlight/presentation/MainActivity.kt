@@ -1,8 +1,4 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter to find the
- * most up to date changes to the libraries and their usages.
- */
-
+//https://github.com/android/wear-os-samples/tree/main/ComposeStarter
 package com.example.wearosflashlight.presentation
 
 import android.app.Activity
@@ -12,73 +8,74 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import androidx.wear.tooling.preview.devices.WearDevices
-import com.example.wearosflashlight.R
-import com.example.wearosflashlight.presentation.theme.WearosflashlightTheme
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import kotlin.random.Random
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 
-//import androidx.wear.ambient.AmbientLifecycleObserver
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import kotlin.random.Random
 
-
+/**
+ * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
+ *
+ * Displays a centered [Text] composable and a list built with [Horologist]
+ * (https://github.com/google/horologist).
+ *
+ * Use the Wear version of Compose Navigation. You can carry
+ * over your knowledge from mobile and it supports the swipe-to-dismiss gesture (Wear OS's
+ * back action). For more information, go here:
+ * https://developer.android.com/reference/kotlin/androidx/wear/compose/navigation/package-summary
+ */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         super.onCreate(savedInstanceState)
 
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
-            WearAppNavigation()
+            WearApp()
         }
-
     }
-//https://github.com/android/health-samples/blob/main/health-services/ExerciseSample/app/src/main/java/com/example/exercise/MainActivity.kt
-//https://github.com/android/wear-os-samples/blob/main/ComposeStarter/app/src/main/java/com/example/android/wearable/composestarter/presentation/MainActivity.kt
 }
+
 @Composable
-fun WearAppNavigation() {
+fun WearApp() {
     val navController = rememberSwipeDismissableNavController()
-    SwipeDismissableNavHost(navController = navController, startDestination = "infinitely_repeating") {
-    // Color Picker Screen
+
+//    WearAppTheme {
+//        AppScaffold {
+    SwipeDismissableNavHost(navController = navController, startDestination = "home") {
+//                composable("menu") {
+//                    GreetingScreen(
+//                        "Android",
+//                        onShowList = { navController.navigate("list") }
+//                    )
+//                }
+//                composable("list") {
+//                    ListScreen()
+//                }
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
                 onTapAction = {
@@ -102,10 +99,11 @@ fun WearAppNavigation() {
                 }
             )
         }
-
-
     }
 }
+//    }
+//}
+
 
 @Composable
 fun HomeScreen(onTapAction: () -> Unit) {
@@ -140,21 +138,18 @@ fun WhiteScreen(onTapAction: () -> Unit) {
 }
 
 
-
-// https://github.com/android/health-samples/blob/main/health-services/ExerciseSampleCompose/app/src/main/java/com/example/exercisesamplecompose/presentation/ExerciseSampleApp.kt
 @Composable
-fun WearApp(greetingName: String) {
-    WearosflashlightTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
+fun WearApp2(greetingName: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
 //                .background(color = Color.White),
-                    ,
-            contentAlignment = Alignment.Center
-        ) {
-        }
+        ,
+        contentAlignment = Alignment.Center
+    ) {
     }
 }
+
 @Composable
 fun UpdateBrightness() {
     val context = LocalContext.current
@@ -173,7 +168,6 @@ fun setBrightness(context: Context, isFull: Boolean) {
     activity.window.attributes = layoutParams
 }
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
-@Preview
 @Composable
 fun InfinitelyRepeatable(onTapAction: () -> Unit) {
     // [START android_compose_animation_infinitely_repeating]
@@ -209,7 +203,8 @@ fun InfinitelyRepeatable(onTapAction: () -> Unit) {
     ) {
         // your composable here
         UpdateBrightness()
-        WearApp("Android")
+        WearApp2("Android")
     }
     // [END android_compose_animation_infinitely_repeating]
 }
+
