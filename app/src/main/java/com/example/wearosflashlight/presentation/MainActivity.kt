@@ -42,6 +42,11 @@ import androidx.wear.compose.material.SwipeToDismissBox
 
 import kotlin.random.Random
 
+import androidx.wear.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.FlashlightOff
+import androidx.compose.material.icons.rounded.FlashlightOn
+
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
  *
@@ -131,9 +136,20 @@ fun HomeScreen(onTapAction: () -> Unit) {
 //            tint = Color.White)
 //    }
 
-            Text(
-                text = "Tap",
-                color = Color.White
+//            Text(
+//                text = "Tap",
+//                color = Color.White
+//            )
+
+//            flashlight_on
+
+
+
+            Icon(
+                imageVector = Icons.Rounded.FlashlightOff,
+                contentDescription = "FlashlightOff",
+                tint = Color.White
+
             )
         }
     }
@@ -163,6 +179,12 @@ fun WhiteScreen(onTapAction: () -> Unit) {
                 },
             contentAlignment = Alignment.Center
         ) {
+            Icon(
+                imageVector = Icons.Rounded.FlashlightOn,
+                contentDescription = "FlashlightOn",
+                tint = Color.LightGray
+
+            )
         }
     }
 }
@@ -177,6 +199,12 @@ fun Screen(greetingName: String) {
             ,
             contentAlignment = Alignment.Center
         ) {
+            Icon(
+                imageVector = Icons.Rounded.FlashlightOn,
+                contentDescription = "FlashlightOn",
+                tint = Color.LightGray
+
+            )
         }
 }
 
