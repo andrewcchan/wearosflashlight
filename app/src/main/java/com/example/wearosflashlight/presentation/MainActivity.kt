@@ -76,7 +76,7 @@ fun WearApp() {
 
 //    WearAppTheme {
 //        AppScaffold {
-    SwipeDismissableNavHost(navController = navController, startDestination = "home") {
+    SwipeDismissableNavHost(navController = navController, startDestination = "white") {
 
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
@@ -113,6 +113,7 @@ fun HomeScreen(onTapAction: () -> Unit) {
     val context = LocalContext.current  // Get the current activity context
 
     SwipeToDismissBox(
+        hasBackground = false,
         state = swipeToDismissState,
         onDismissed = {
             // Finish the activity and return to the watch face
@@ -130,20 +131,6 @@ fun HomeScreen(onTapAction: () -> Unit) {
                 },
             contentAlignment = Alignment.Center
         ) {
-//        Icon(
-//            imageVector = androidx.compose.material.icons.Icons.Default.WbSunny,
-//            contentDescription = null,
-//            tint = Color.White)
-//    }
-
-//            Text(
-//                text = "Tap",
-//                color = Color.White
-//            )
-
-//            flashlight_on
-
-
 
             Icon(
                 imageVector = Icons.Rounded.FlashlightOff,
@@ -162,6 +149,7 @@ fun WhiteScreen(onTapAction: () -> Unit) {
     val context = LocalContext.current  // Get the current activity context
 
     SwipeToDismissBox(
+        hasBackground = false,
         state = swipeToDismissState,
         onDismissed = {
             // Finish the activity and return to the watch face
@@ -255,6 +243,7 @@ fun InfinitelyRepeatable(onTapAction: () -> Unit) {
     val context = LocalContext.current  // Get the current activity context
 
     SwipeToDismissBox(
+        hasBackground = false,
         state = swipeToDismissState,
         onDismissed = {
             // Finish the activity and return to the watch face
