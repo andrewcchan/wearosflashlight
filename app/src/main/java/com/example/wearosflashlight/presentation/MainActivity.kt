@@ -10,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
@@ -18,6 +19,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +48,8 @@ import androidx.wear.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FlashlightOff
 import androidx.compose.material.icons.rounded.FlashlightOn
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.dp
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -145,13 +149,48 @@ fun HomeScreen(onTapAction: () -> Unit) {
 
 
 
-            Icon(
-                imageVector = Icons.Rounded.FlashlightOff,
-                contentDescription = "FlashlightOff",
-                tint = Color.White
+//            Icon(
+//                imageVector = Icons.Rounded.FlashlightOff,
+//                contentDescription = "FlashlightOff",
+//                tint = Color.White
+//
+//            )
+            RotatingFlashlightIcon() // Use the animated icon
 
-            )
         }
+    }
+}
+
+@Composable
+fun RotatingFlashlightIcon() {
+    // Infinite transition for the rotation
+    val infiniteTransition = rememberInfiniteTransition()
+
+    // Define the rotation angle that oscillates side to side between -30° and 30°
+    val rotationAngle by infiniteTransition.animateFloat(
+        initialValue = -30f,
+        targetValue = 30f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    // Display the flashlight icon with rotation
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.FlashlightOff, // Replace with FlashlightOn if needed
+            contentDescription = "Rotating Flashlight",
+            modifier = Modifier
+                .graphicsLayer(rotationZ = rotationAngle) // Apply rotation
+                .size(48.dp), // Adjust size as needed
+            tint = Color.White
+        )
     }
 }
 
