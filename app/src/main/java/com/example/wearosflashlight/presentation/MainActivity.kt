@@ -213,9 +213,10 @@ fun DampingSineRotatingFlashlightIcon() {
 
     // Calculate the rotation angle using a damping sine function
     val rotationAngle = remember(time) {
-        val dampingFactor = 0.99f // Controls how quickly the oscillation damps
+        val dampingFactor = 0.999f // Controls how quickly the oscillation damps
+//        val dampingFactor = 0.1* Math.sin(time * Math.PI).toFloat()
         val amplitude = 15f      // Maximum rotation angle in degrees
-        val frequency = 10f // Frequency in Hz
+        val frequency = 15f // Frequency in Hz
 
         amplitude * Math.exp((-dampingFactor * time).toDouble()) * Math.sin(time * frequency * Math.PI).toFloat()
     }
@@ -231,8 +232,8 @@ fun DampingSineRotatingFlashlightIcon() {
             imageVector = Icons.Rounded.FlashlightOff, // Replace with FlashlightOn if needed
             contentDescription = "Damping Rotating Flashlight",
             modifier = Modifier
-                .graphicsLayer(rotationZ = rotationAngle.toFloat()) // Apply damping sine rotation
-                .size(48.dp), // Adjust size as needed
+                .graphicsLayer(rotationZ = rotationAngle.toFloat()), // Apply damping sine rotation
+//                .size(48.dp), // Adjust size as needed
             tint = Color.White
         )
     }
