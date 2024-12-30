@@ -48,6 +48,10 @@ import androidx.wear.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FlashlightOff
 import androidx.compose.material.icons.rounded.FlashlightOn
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 
@@ -80,7 +84,7 @@ fun WearApp() {
 
 //    WearAppTheme {
 //        AppScaffold {
-    SwipeDismissableNavHost(navController = navController, startDestination = "white") {
+    SwipeDismissableNavHost(navController = navController, startDestination = "home") {
 
         composable("infinitely_repeating") {
             InfinitelyRepeatable(
@@ -155,7 +159,7 @@ fun HomeScreen(onTapAction: () -> Unit) {
 //                tint = Color.White
 //
 //            )
-            RotatingFlashlightIcon() // Use the animated icon
+            DampingSineRotatingFlashlightIcon() // Use the animated icon
 
         }
     }
@@ -168,10 +172,10 @@ fun RotatingFlashlightIcon() {
 
     // Define the rotation angle that oscillates side to side between -30° and 30°
     val rotationAngle by infiniteTransition.animateFloat(
-        initialValue = -30f,
-        targetValue = 30f,
+        initialValue = -5f,
+        targetValue = 5f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            animation = tween(durationMillis = 500, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         )
     )
@@ -188,6 +192,46 @@ fun RotatingFlashlightIcon() {
             contentDescription = "Rotating Flashlight",
             modifier = Modifier
                 .graphicsLayer(rotationZ = rotationAngle) // Apply rotation
+                .size(48.dp), // Adjust size as needed
+            tint = Color.White
+        )
+    }
+}
+
+@Composable
+fun DampingSineRotatingFlashlightIcon() {
+    // Animation state
+    var time by remember { mutableStateOf(0f) }
+
+    // Update time continuously
+    LaunchedEffect(Unit) {
+        while (true) {
+            time += 0.016f // Increment time (approximately 60 FPS)
+            kotlinx.coroutines.delay(16L)
+        }
+    }
+
+    // Calculate the rotation angle using a damping sine function
+    val rotationAngle = remember(time) {
+        val dampingFactor = 0.99f // Controls how quickly the oscillation damps
+        val amplitude = 15f      // Maximum rotation angle in degrees
+        val frequency = 10f // Frequency in Hz
+
+        amplitude * Math.exp((-dampingFactor * time).toDouble()) * Math.sin(time * frequency * Math.PI).toFloat()
+    }
+
+    // Display the flashlight icon with the calculated rotation
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = Icons.Rounded.FlashlightOff, // Replace with FlashlightOn if needed
+            contentDescription = "Damping Rotating Flashlight",
+            modifier = Modifier
+                .graphicsLayer(rotationZ = rotationAngle.toFloat()) // Apply damping sine rotation
                 .size(48.dp), // Adjust size as needed
             tint = Color.White
         )
