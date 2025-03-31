@@ -112,13 +112,6 @@ fun HomeScreen(onTapAction: () -> Unit) {
     val swipeToDismissState = rememberSwipeToDismissBoxState()
     val context = LocalContext.current  // Get the current activity context
 
-    SwipeToDismissBox(
-        state = swipeToDismissState,
-        onDismissed = {
-            // Finish the activity and return to the watch face
-            (context as? Activity)?.finish()
-        }
-    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -130,19 +123,6 @@ fun HomeScreen(onTapAction: () -> Unit) {
                 },
             contentAlignment = Alignment.Center
         ) {
-//        Icon(
-//            imageVector = androidx.compose.material.icons.Icons.Default.WbSunny,
-//            contentDescription = null,
-//            tint = Color.White)
-//    }
-
-//            Text(
-//                text = "Tap",
-//                color = Color.White
-//            )
-
-//            flashlight_on
-
 
 
             Icon(
@@ -153,39 +133,29 @@ fun HomeScreen(onTapAction: () -> Unit) {
             )
         }
     }
-}
 
 
 @Composable
 fun WhiteScreen(onTapAction: () -> Unit) {
     val swipeToDismissState = rememberSwipeToDismissBoxState()
     val context = LocalContext.current  // Get the current activity context
-
-    SwipeToDismissBox(
-        state = swipeToDismissState,
-        onDismissed = {
-            // Finish the activity and return to the watch face
-            (context as? Activity)?.finish()
-        }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    onTapAction() // Call the passed function on tap
+                })
+            },
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = {
-                        onTapAction() // Call the passed function on tap
-                    })
-                },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.FlashlightOn,
-                contentDescription = "FlashlightOn",
-                tint = Color.LightGray
+        Icon(
+            imageVector = Icons.Rounded.FlashlightOn,
+            contentDescription = "FlashlightOn",
+            tint = Color.LightGray
 
-            )
-        }
+        )
     }
 }
 
@@ -230,41 +200,13 @@ fun setBrightness(context: Context, isFull: Boolean) {
 // https://developer.android.com/develop/ui/compose/animation/quick-guide
 @Composable
 fun InfinitelyRepeatable(onTapAction: () -> Unit) {
-    // [START android_compose_animation_infinitely_repeating]
-    val infiniteTransition = rememberInfiniteTransition(label = "infinite")
-    val color by infiniteTransition.animateColor(
-        initialValue = Color(
-            red = Random.nextFloat(),
-            green = Random.nextFloat(),
-            blue = Random.nextFloat(),
-            alpha = 1f
-        ),
-        targetValue = Color(
-            red = Random.nextFloat(),
-            green = Random.nextFloat(),
-            blue = Random.nextFloat(),
-            alpha = 1f
-        ),
-        animationSpec = infiniteRepeatable(
-            animation = tween(1000, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "color"
-    )
     val swipeToDismissState = rememberSwipeToDismissBoxState()
     val context = LocalContext.current  // Get the current activity context
 
-    SwipeToDismissBox(
-        state = swipeToDismissState,
-        onDismissed = {
-            // Finish the activity and return to the watch face
-            (context as? Activity)?.finish()
-        }
-    ) {
         Column(
             modifier = Modifier
                 .drawBehind {
-                    drawRect(color)
+                    drawRect(Color.Red)
                 }
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = {
@@ -276,7 +218,5 @@ fun InfinitelyRepeatable(onTapAction: () -> Unit) {
             UpdateBrightness()
             Screen("Android")
         }
-        // [END android_compose_animation_infinitely_repeating]
     }
-}
 
